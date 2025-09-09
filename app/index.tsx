@@ -147,7 +147,7 @@ export default function IndexPage() {
 
       // Preprocess pixels if needed
       let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const t = Math.max(0, Math.min(255, threshold));
+      const numericThreshold = Math.max(0, Math.min(255, threshold));
       if (removeBg || linesOnly) {
         const data = imageData.data;
         // Sample background reference from corners or top-left
@@ -161,7 +161,7 @@ export default function IndexPage() {
           }
           bgR = Math.round(rSum/c); bgG = Math.round(gSum/c); bgB = Math.round(bSum/c);
         }
-        const distThreshold = Math.max(0, Math.min(441, (t / 255) * 441)); // 0..sqrt(255^2*3)
+        const distThreshold = Math.max(0, Math.min(441, (numericThreshold / 255) * 441)); // 0..sqrt(255^2*3)
         const toGray = (r:number,g:number,b:number) => Math.round(0.299*r + 0.587*g + 0.114*b);
         for (let i = 0; i < data.length; i += 4) {
           const r = data[i], g = data[i+1], b = data[i+2];
@@ -179,7 +179,7 @@ export default function IndexPage() {
           } else if (linesOnly) {
             // Threshold to binary (line art)
             const gray = toGray(r,g,b);
-            const thresholded = invertThreshold ? (gray < t) : (gray >= t);
+            const thresholded = invertThreshold ? (gray < numericThreshold) : (gray >= numericThreshold);
             const val = thresholded ? 255 : 0;
             data[i] = data[i+1] = data[i+2] = val;
             data[i+3] = a; // preserve alpha
