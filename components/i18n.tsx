@@ -97,7 +97,7 @@ const strings = {
   }
 } as const;
 
-const I18nContext = createContext<{ lang: Lang; setLang: (l: Lang) => void; t: typeof strings.en } | null>(null);
+const I18nContext = createContext<{ lang: Lang; setLang: (l: Lang) => void; t: (typeof strings)[Lang] } | null>(null);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLang] = useState<Lang>("en");
